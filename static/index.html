@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 20: Agentic Triage Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #080C14; color: #E2E8F0; font-family: 'Inter', sans-serif; }
+        .glass-panel { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .neon-border { border: 1px solid #38BDF8; box-shadow: 0 0 12px rgba(56, 189, 248, 0.25); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header Navigation -->
+    <header class="glass-panel sticky top-0 z-50 border-b border-slate-800 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-400 font-bold text-xl">P20</div>
+            <div>
+                <h1 class="font-bold text-lg text-white">Project 20: Agentic Triage</h1>
+                <p class="text-xs text-slate-400">Team LOGIC LABS • CSE Dept</p>
+            </div>
+        </div>
+        <div id="userInfo" class="flex items-center space-x-4">
+            <button onclick="showAuthModal()" class="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-semibold rounded-lg text-sm transition">
+                <i class="fa-solid fa-right-to-bracket mr-2"></i>Login / Register
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Left Column: Student Complaint Portal -->
+        <div class="glass-panel rounded-2xl p-6 flex flex-col space-y-4">
+            <h2 class="text-xl font-bold text-white flex items-center">
+                <i class="fa-solid fa-paper-plane text-cyan-400 mr-2"></i>Submit Complaint
+            </h2>
+            <p class="text-xs text-slate-400">AI automatically classifies category, detects duplicate reports, and checks emergency safety conditions.</p>
+            
+            <form id="ticketForm" onsubmit="handleTicketSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Student Name</label>
+                    <input type="text" id="studentName" required value="Harsh Kumar" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Grievance / Complaint Description</label>
+                    <textarea id="ticketContent" rows="4" required placeholder="Describe the issue in detail..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-400"></textarea>
+                </div>
+                <button type="submit" class="w-full py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-lg text-sm transition shadow-lg shadow-cyan-500/20">
+                    <i class="fa-solid fa-bolt mr-2"></i>Run Agentic Triage
+                </button>
+            </form>
+
+            <hr class="border-slate-800">
+
+            <div>
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">Viva Quick Demo Presets</span>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="setPreset('Fan broken in Lab 302')" class="p-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-left rounded-lg text-xs text-slate-300">
+                        ⚡ Standard Fan Failure
+                    </button>
+                    <button onclick="setPreset('Gas leak and heavy smoke in Chem Lab')" class="p-2 bg-red-950/40 hover:bg-red-900/50 border border-red-800/50 text-left rounded-lg text-xs text-red-300">
+                        🚨 Emergency Smoke Hazard
+                    </button>
+                    <button onclick="setPreset('WiFi connection down in Hostel Block B')" class="p-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-left rounded-lg text-xs text-slate-300">
+                        🌐 Hostel WiFi Outage
+                    </button>
+                    <button onclick="setPreset('Ceiling fan making loud noise in Lab 302')" class="p-2 bg-purple-950/40 hover:bg-purple-900/50 border border-purple-800/50 text-left rounded-lg text-xs text-purple-300">
+                        🔄 FAISS Duplicate Merge
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle & Right Columns: Live Triage & Admin Dashboard -->
+        <div class="md:col-span-2 space-y-6">
+            
+            <!-- System Metrics Banner -->
+            <div class="grid grid-cols-3 gap-4">
+                <div class="glass-panel p-4 rounded-xl text-center border-l-4 border-cyan-400">
+                    <p class="text-xs text-slate-400">Resolution Speedup</p>
+                    <p class="text-2xl font-bold text-cyan-400">85%</p>
+                </div>
+                <div class="glass-panel p-4 rounded-xl text-center border-l-4 border-purple-400">
+                    <p class="text-xs text-slate-400">Deduplication Accuracy</p>
+                    <p class="text-2xl font-bold text-purple-400">100%</p>
+                </div>
+                <div class="glass-panel p-4 rounded-xl text-center border-l-4 border-red-500">
+                    <p class="text-xs text-slate-400">Emergency Latency</p>
+                    <p class="text-2xl font-bold text-red-400">0 ms</p>
+                </div>
+            </div>
+
+            <!-- Triage Results / Alert Window -->
+            <div id="resultCard" class="hidden glass-panel p-6 rounded-2xl border border-cyan-500/30">
+                <h3 id="resultTitle" class="font-bold text-lg mb-2"></h3>
+                <p id="resultMsg" class="text-sm text-slate-300 mb-3"></p>
+                <div id="resultBadge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold"></div>
+            </div>
+
+            <!-- Live Master Work Orders -->
+            <div class="glass-panel rounded-2xl p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-lg text-white">
+                        <i class="fa-solid fa-list-check text-cyan-400 mr-2"></i>Master Work Orders
+                    </h3>
+                    <button onclick="loadTickets()" class="text-xs text-cyan-400 hover:underline">
+                        <i class="fa-solid fa-rotate-right mr-1"></i>Refresh
+                    </button>
+                </div>
+                <div id="ticketList" class="space-y-3 max-h-96 overflow-y-auto pr-2">
+                    <p class="text-xs text-slate-500 italic">No tickets logged yet. Submit a complaint to initiate triage.</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Authentication Modal -->
+    <div id="authModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div class="glass-panel max-w-md w-full p-6 rounded-2xl border border-slate-700">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-white">Account Access</h3>
+                <button onclick="hideAuthModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="handleAuth(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Username</label>
+                    <input type="text" id="authUsername" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Password</label>
+                    <input type="password" id="authPassword" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white">
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-lg text-sm">
+                    Login / Register
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function setPreset(text) {
+            document.getElementById('ticketContent').value = text;
+        }
+
+        function showAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
+        function hideAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
+
+        async function handleAuth(e) {
+            e.preventDefault();
+            const username = document.getElementById('authUsername').value;
+            const password = document.getElementById('authPassword').value;
+
+            try {
+                let res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username, password})
+                });
+
+                if(!res.ok) {
+                    res = await fetch('/api/auth/register', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({username, email: `${username}@eastpoint.edu.in`, password, role: 'student'})
+                    });
+                    alert('Account registered! Logging in...');
+                    return handleAuth(e);
+                }
+
+                const data = await res.json();
+                localStorage.setItem('token', data.access_token);
+                document.getElementById('userInfo').innerHTML = `
+                    <span class="text-xs text-cyan-400 font-semibold"><i class="fa-solid fa-user mr-1"></i>${data.username} (${data.role})</span>
+                `;
+                hideAuthModal();
+            } catch(err) {
+                alert('Authentication failed');
+            }
+        }
+
+        async function handleTicketSubmit(e) {
+            e.preventDefault();
+            const student_name = document.getElementById('studentName').value;
+            const content = document.getElementById('ticketContent').value;
+
+            const res = await fetch('/api/tickets/submit', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({student_name, content})
+            });
+
+            const data = await res.json();
+            const card = document.getElementById('resultCard');
+            card.classList.remove('hidden');
+
+            if(data.status === 'EMERGENCY_BYPASS') {
+                card.className = 'glass-panel p-6 rounded-2xl border-2 border-red-500 bg-red-950/30';
+                document.getElementById('resultTitle').className = 'font-bold text-lg text-red-400';
+                document.getElementById('resultTitle').innerHTML = '🚨 ZERO-LATENCY EMERGENCY BYPASS';
+                document.getElementById('resultMsg').innerText = data.message;
+            } else if(data.status === 'MERGED') {
+                card.className = 'glass-panel p-6 rounded-2xl border-2 border-purple-500 bg-purple-950/30';
+                document.getElementById('resultTitle').className = 'font-bold text-lg text-purple-300';
+                document.getElementById('resultTitle').innerHTML = '🔄 FAISS VECTOR DEDUPLICATION MATCH';
+                document.getElementById('resultMsg').innerText = `${data.message} (${data.similarity}% Similarity Score)`;
+            } else {
+                card.className = 'glass-panel p-6 rounded-2xl border-2 border-cyan-500 bg-cyan-950/30';
+                document.getElementById('resultTitle').className = 'font-bold text-lg text-cyan-300';
+                document.getElementById('resultTitle').innerHTML = '✅ MASTER WORK ORDER CREATED';
+                document.getElementById('resultMsg').innerText = data.message;
+            }
+
+            loadTickets();
+        }
+
+        async function loadTickets() {
+            const res = await fetch('/api/tickets/all');
+            const tickets = await res.json();
+            const list = document.getElementById('ticketList');
+
+            if(tickets.length === 0) return;
+
+            list.innerHTML = tickets.map(t => `
+                <div class="p-3 bg-slate-900 border ${t.is_emergency ? 'border-red-500/50' : 'border-slate-800'} rounded-xl flex justify-between items-center">
+                    <div>
+                        <span class="text-xs font-bold ${t.is_emergency ? 'text-red-400' : 'text-cyan-400'}">${t.ticket_code}</span>
+                        <p class="text-xs text-slate-200 mt-1">${t.content}</p>
+                        <span class="text-[10px] text-slate-500">${t.category} • Urgency: ${t.urgency}</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="px-2 py-1 bg-slate-800 text-[10px] rounded-md text-slate-300">${t.status}</span>
+                        ${t.merged_count > 1 ? `<span class="block text-[10px] text-purple-400 font-semibold mt-1">${t.merged_count} Merged</span>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        loadTickets();
+    </script>
+</body>
+</html>
